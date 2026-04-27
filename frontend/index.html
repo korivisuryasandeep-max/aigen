@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURAL_SNAKE_OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: { 400: '#00ffff', 500: '#00cccc' },
+                        magenta: { 400: '#ff00ff', 500: '#cc00cc' },
+                        dark: '#050505'
+                    },
+                    fontFamily: {
+                        mono: ['VT323', 'monospace'],
+                    },
+                    animation: {
+                        'glitch-1': 'glitch-anim-1 2.5s infinite linear alternate-reverse',
+                        'glitch-2': 'glitch-anim-2 3s infinite linear alternate-reverse',
+                        'scanline': 'scanline 8s linear infinite',
+                        'blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        'blink': {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0 },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #00ffff;
+            overflow: hidden;
+        }
+
+        /* Scanline effect */
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 50;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Glitch Text Effect */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(13px, 9999px, 94px, 0); }
+            5% { clip: rect(72px, 9999px, 14px, 0); }
+            10% { clip: rect(29px, 9999px, 83px, 0); }
+            15% { clip: rect(94px, 9999px, 35px, 0); }
+            20% { clip: rect(2px, 9999px, 55px, 0); }
+            25% { clip: rect(46px, 9999px, 12px, 0); }
+            30% { clip: rect(88px, 9999px, 77px, 0); }
+            35% { clip: rect(15px, 9999px, 22px, 0); }
+            40% { clip: rect(63px, 9999px, 99px, 0); }
+            45% { clip: rect(34px, 9999px, 44px, 0); }
+            50% { clip: rect(91px, 9999px, 66px, 0); }
+            55% { clip: rect(8px, 9999px, 11px, 0); }
+            60% { clip: rect(55px, 9999px, 88px, 0); }
+            65% { clip: rect(22px, 9999px, 33px, 0); }
+            70% { clip: rect(77px, 9999px, 55px, 0); }
+            75% { clip: rect(44px, 9999px, 77px, 0); }
+            80% { clip: rect(99px, 9999px, 22px, 0); }
+            85% { clip: rect(11px, 9999px, 99px, 0); }
+            90% { clip: rect(66px, 9999px, 44px, 0); }
+            95% { clip: rect(33px, 9999px, 66px, 0); }
+            100% { clip: rect(88px, 9999px, 11px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+
+        /* CRT Screen curve */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .crt {
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+        }
+    </style>
+    </head>
+<body class="font-mono antialiased h-screen w-screen flex items-center justify-center scanlines crt">
+    <div id="root" class="w-full h-full relative z-10"></div>
+    <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.js"></script></body>
+</html>
